@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pattern Matcher</title>
+</head>
+<body>
+    <h1>Pattern Matcher</h1>
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="text_input" rows="4" cols="50" placeholder="Enter text to analyze..."></textarea><br>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if matched_category %}
+        <h2>Matched Category: {{ matched_category }}</h2>
+        <p>Input Text: {{ text_input }}</p>
+    {% endif %}
+</body>
+</html>

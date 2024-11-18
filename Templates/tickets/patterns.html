@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patterns List</title>
+</head>
+<body>
+    <h1>Existing Patterns</h1>
+    <ul>
+        {% for pattern in patterns %}
+            <li>{{ pattern.category }}: {{ pattern.pattern }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'index' %}">Back to Matcher</a>
+</body>
+</html>

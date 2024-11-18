@@ -1,0 +1,19 @@
+<!-- templates/recording.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Screen Recorder</title>
+</head>
+<body>
+    <h1>Screen Recording</h1>
+    <form action="{% url 'start_recordings' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Start Recording</button>
+    </form>
+    <form action="{% url 'stop_recordings' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Stop Recording</button>
+    </form>
+</body>
+</html>

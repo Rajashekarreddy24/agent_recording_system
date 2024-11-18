@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recording in Progress</title>
+</head>
+<body>
+    <h1>Recording is in progress for Ticket ID: {{ ticket_id }}</h1>
+    <p>To stop the recording, click <a href="{% url 'stop_recording' ticket_id=ticket_id %}">here</a>.</p>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!-- recording_template.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Screen Recording</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Screen Recording for Ticket {{ ticket.ticket_id }}</h1>
+
+    <button id="recordButton" onclick="toggleRecording({{ ticket.ticket_id }})">Start Recording</button>
+
+    <script>
+        let isRecording = false;
+
+        function toggleRecording(ticketId) {
+            if (isRecording) {
+                // Stop recording
+                $.ajax({
+                    url: `{% url 'stop_recording' ticket_id=ticket.ticket_id %}`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        alert(response.status);
+                        $("#recordButton").text("Start Recording");
+                        isRecording = false;
+                    },
+                    error: function() {
+                        alert("Error stopping the recording.");
+                    }
+                });
+            } else {
+                // Start recording
+                $.ajax({
+                    url: `{% url 'start_recording' ticket_id=ticket.ticket_id %}`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        alert(response.status);
+                        $("#recordButton").text("Stop Recording");
+                        isRecording = true;
+                    },
+                    error: function() {
+                        alert("Error starting the recording.");
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

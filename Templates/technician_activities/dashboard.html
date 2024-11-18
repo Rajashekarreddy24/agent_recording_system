@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Dashboard</h1>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h2>Active Tickets</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Status</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr>
+                            <td>{{ ticket.ticket_id }}</td>
+                            <td>{{ ticket.status }}</td>
+                            <td>{{ ticket.category }}</td>
+                            <td>
+                                {% comment %} <a href="{% url 'start_recording' ticket.ticket_id %}" class="btn btn-primary">Start Recording</a>
+                                <button class="btn btn-danger" onclick="stopRecording('{{ ticket.ticket_id }}')">Stop Recording</button> {% endcomment %}
+                                <a href="{% url 'download_report' ticket.ticket_id %}" class="btn btn-success" title="Download Report">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                <a href="{% url 'ticket_detail' ticket.ticket_id %}" class="btn btn-info" title="View Ticket">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                 <!-- View Ticket Button -->
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function stopRecording(ticketId) {
+            fetch(`/stop_recording/${ticketId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'Recording stopped successfully') {
+                    alert('Recording has been stopped.');
+                } else {
+                    alert(data.status);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html> 
+
+{% comment %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Dashboard</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h2>Active Tickets</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Status</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr>
+                            <td>{{ ticket.ticket_id }}</td>
+                            <td>{{ ticket.status }}</td>
+                            <td>{{ ticket.category }}</td>
+                            <td>
+                                <a href="{% url 'start_recording' ticket.ticket_id %}" class="btn btn-primary">Start Recording</a>
+                                <a href="{% url 'stop_recording' ticket.ticket_id %}" class="btn btn-danger">Stop Recording</a>
+                                <a href="{% url 'download_report' ticket.ticket_id %}" class="btn btn-success">Download Report</a>
+                                <a href="{% url 'ticket_detail' ticket.ticket_id %}" class="btn btn-info">View Ticket</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html> {% endcomment %}

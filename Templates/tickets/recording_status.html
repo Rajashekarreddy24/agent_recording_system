@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recording Status</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        .container {
+            margin-top: 50px; /* Space above the container */
+            max-width: 600px; /* Set a maximum width */
+        }
+        h1 {
+            color: #343a40; /* Darker text for header */
+        }
+        .status-message {
+            font-size: 1.2em; /* Slightly larger font for the status message */
+            margin-bottom: 20px; /* Space below the status message */
+        }
+    </style>
+</head>
+<body>
+    <div class="container bg-white rounded shadow p-4">
+        <h1 class="text-center">Recording Status</h1>
+        <p class="status-message text-center">Recording is in progress for Ticket ID: <strong>{{ ticket_id }}</strong></p>
+        <form method="post" class="text-center">
+            {% csrf_token %}
+            <a href="{% url 'dashboard' %}" class="btn btn-danger btn-lg">Stop Recording</a>
+        </form>
+        {% comment %} <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg mt-3">Back to Dashboard</a> {% endcomment %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

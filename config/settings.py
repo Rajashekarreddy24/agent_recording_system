@@ -9,36 +9,42 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+# settings.py
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nw2hc5mz(lb)ksvbx4^0&snk&@_9xo$^&%gzv%&3ro&q6*i91%'
+SECRET_KEY = 'your-secret-key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
-
 INSTALLED_APPS = [
+    # Django built-in apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local apps
+    'apps.core',           # Core functionality
+    'apps.tickets',        # Ticket management
+    'apps.recordings',     # Screen recording
+    'apps.agents',         # Agent management
+    # You might want to include any third-party apps here, e.g., REST framework
+    'rest_framework',      # Django REST framework for APIs
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -49,12 +55,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URL Configuration
 ROOT_URLCONF = 'config.urls'
 
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "Templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,23 +75,18 @@ TEMPLATES = [
     },
 ]
 
+# WSGI application
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# Database settings (example configuration)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # Use SQLite as the database
+        'NAME': BASE_DIR / "db.sqlite3",          # Database file path
     }
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -99,25 +102,67 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'
 
-STATIC_URL = 'static/'
+# Configure the media files (if applicable)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'  # Adjust according to your requirements
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+# Additional settings for Django REST framework if you're using it
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+}
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Set to '2' to display warnings only, '3' to ignore all
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "codec;openh264"
+
+
+TICKET_SYSTEM_API_URL = 'https://staging.connectwisedev.com' 
+TICKET_SYSTEM_API_KEY = 'eGFtcGxpZnlfYytGM1NsV2hFNUhJaUNZSThUOmlFMWo4NExGRW9RV1pWZ2I='  
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'WARNING',  # Set this to WARNING or ERROR to suppress INFO logs
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',  # Suppress INFO messages globally
+    },
+    'loggers': {
+        'Technician_activities': {
+            'handlers': ['console'],
+            'level': 'WARNING',  # Adjust per logger if needed
+            'propagate': False,
+        },
+    },
+}
+
+
+# Screen recorder settings
+SCREEN_RECORDER = {
+    'OUTPUT_DIR': os.path.join(MEDIA_ROOT, 'recordings'),
+    'FPS': 10,
+    'QUALITY': 'high',
+}

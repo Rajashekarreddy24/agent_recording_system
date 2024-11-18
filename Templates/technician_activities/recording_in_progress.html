@@ -1,0 +1,59 @@
+<!-- templates/technician_activities/recording_in_progress.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recording in Progress</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .loading {
+            font-size: 1.5em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .stop-btn {
+            background-color: #d9534f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+        .stop-btn:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">Recording is in progress...</div>
+    <button class="stop-btn" onclick="stopRecording()">Stop Recording</button>
+
+    <script>
+        function stopRecording() {
+            const ticketId = "{{ ticket_id }}";
+            fetch(`/stop_recording/${ticketId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'Recording stopped successfully') {
+                    alert('Recording has been stopped.');
+                    window.location.href = '/';  // Redirect to dashboard or another page as needed
+                } else {
+                    alert(data.status || 'Failed to stop recording.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+categories:
+  access_request:
+  - (?i)request.{0,10}access
+  - (?i)permission.{0,10}needed
+  - (?i)grant.{0,10}access
+  password_reset:
+  - (?i)password.{0,10}reset
+  - (?i)forgot.{0,10}password
+  - (?i)change.{0,10}password
+  software_install:
+  - (?i)install.{0,10}software
+  - (?i)new.{0,10}application
+  - (?i)download.{0,10}program
+priorities:
+  high:
+  - (?i)urgent
+  - (?i)critical
+  - (?i)emergency
+  low:
+  - (?i)low
+  - (?i)minor
+  - (?i)whenever
+  medium:
+  - (?i)normal
+  - (?i)standard
+  - (?i)regular

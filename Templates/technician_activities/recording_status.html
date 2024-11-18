@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recording Status</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Recording Status</h1>
+        <p>Recording is in progress for Ticket ID: {{ ticket_id }}</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="action" value="stop" class="btn btn-danger">Stop Recording</button>
+        </form>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</body>
+</html>

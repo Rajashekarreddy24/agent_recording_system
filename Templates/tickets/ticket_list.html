@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket List</title>
+</head>
+<body>
+    <h1>Ticket List</h1>
+    <ul>
+        {% for ticket in tickets %}
+            <li>
+                {{ ticket.ticket_id }} - {{ ticket.category }} - {{ ticket.priority }}
+                <a href="{% url 'ticket_detail' ticket.pk %}">View Ticket</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report for Ticket {{ ticket.ticket_id }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Report for Ticket: {{ ticket.ticket_id }}</h1>
+        <a href="{% url 'download_report' ticket.ticket_id %}" class="btn btn-success">Download Report</a>
+
+        <h2 class="mt-4">Activities</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Activity ID</th>
+                    <th>Timestamp</th>
+                    <th>Application</th>
+                    <th>Action</th>
+                    <th>Notes</th>
+                    <th>Duration</th>
+                    <th>Category</th>
+                    <th>Automated Flag</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in activities %}
+                <tr>
+                    <td>{{ activity.id }}</td>
+                    <td>{{ activity.timestamp }}</td>
+                    <td>{{ activity.application }}</td>
+                    <td>{{ activity.action }}</td>
+                    <td>{{ activity.notes }}</td>
+                    <td>{{ activity.duration }}</td>
+                    <td>{{ activity.category }}</td>
+                    <td>{{ activity.automated_flag }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<button onclick="startMonitoring()">Start Monitoring</button>
+<button onclick="stopMonitoring()">Stop Monitoring</button>
+
+<script>
+function startMonitoring() {
+    fetch(`/monitor/start/{{ ticket.ticket_id }}/`)
+        .then(response => response.json())
+        .then(data => alert(data.status))
+        .catch(error => console.error('Error starting monitoring:', error));
+}
+
+function stopMonitoring() {
+    fetch(`/monitor/stop/{{ ticket.ticket_id }}/`)
+        .then(response => response.json())
+        .then(data => alert(data.status))
+        .catch(error => console.error('Error stopping monitoring:', error));
+}
+</script>
